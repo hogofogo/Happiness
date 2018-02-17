@@ -1,0 +1,52 @@
+---
+title: "Happiness density markdown"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE, warning = FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, warning = FALSE, include=FALSE}
+library(ggplot2)
+library("dplyr")
+
+setwd("~/Projects/Happiness")
+df <- read.csv(file="~/Projects/Happiness/happiness_data.csv")
+
+#take a sample of regions we are interested in
+exam = df[df$Region %in% c('Western Europe','North America', 'Latin America and Caribbean', 'Eastern Asia'), ]
+
+
+#take mean of values over the three years 2015-2017 by country
+exam <- aggregate(exam, by=list(exam$Country, exam$Region), 
+  FUN=mean, na.rm=TRUE)
+exam = exam[ , !(colnames(exam) %in% c('Country','Region'))]
+#temp <- df %>% group_by(Region) %>% summarize(mean_happiness = mean(Happiness.Score))
+
+# create usable column names
+colnames(exam) <- c('Country', 'Region', 'X', 'Happy_rank', 'Happy_score', 'GDPpercapita', 'Family', 'Health', 'Freedom', 'Govt', 'Generosity', 'Dystopiares', 'Year')
+```
+
+Based upon the previous analysis, it's interesting to look at the countries and regions that may not fit into the general trend, as well as the main economies.
+
+*  selected regions: Western Europe,North America, Latin America and Caribbean, Eastern Asia
+*  got mean of happy score and GDP per capita for each country over the three years (2015-2017)
+*  built a density graph of regions
+
+
+```{r, echo = FALSE}
+ggplot (exam, aes (x = GDPpercapita, y = Happy_score, colour = Region)) + stat_density2d ()
+```
+
+
+The density graph suggests that the distributions of regions is mostly non-uniform. Built a graph analyzing the GDP per capita and happiness score by country (labeled as such), colored by region.
+
+```{r, echo = FALSE}
+ggplot(exam, aes(x = GDPpercapita, y = Happy_score, colour = Region, label = Country)) +
+  geom_point() + 
+  geom_text(size = 3, nudge_y = -.05) 
+
+```
