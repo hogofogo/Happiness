@@ -12,6 +12,6 @@ Python_markdown runs Python script from R Markdown.
 - Creates and saves graphs
 - Creates a markdown *.html file
 
-Happiness_2d_density_plots takes output from the Python_markdown and builds additional graphs in R
+Happiness_2d_density_plots takes output from the Python_markdown and builds additional graphs in R to examine distribution of selected regions.
 
 For results, see .html and .pdf files.
